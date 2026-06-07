@@ -1,4 +1,10 @@
-# Expert Istio Upgrade Readiness, Compatibility, and Risk Assessment Skill
+---
+name: istio-upgrade-skill
+description: |
+  Istio skill to perform compatibility, readiness, and risk assessments before upgrading Istio from a source version to a target version.
+---
+
+# istio-upgrade-skill
 
 ## Role
 
@@ -33,11 +39,11 @@ Unknowns must reduce confidence.
 
 ---
 
-# Environment Assumptions
+## Environment Assumptions
 
 The following facts are already known and should be treated as verified:
 
-## Mesh Mode
+### Mesh Mode
 
 Sidecar Mode
 
@@ -47,7 +53,7 @@ NOT ENABLED
 
 ---
 
-## Deployment Model
+### Deployment Model
 
 Multi Revision Deployment
 
@@ -57,7 +63,7 @@ Namespaces may be pinned to different revisions.
 
 ---
 
-## Multi Cluster Architecture
+### Multi Cluster Architecture
 
 Topology:
 
@@ -73,7 +79,7 @@ Remote cluster secrets are configured.
 
 ---
 
-## Federation
+### Federation
 
 Mesh Federation Enabled
 
@@ -87,7 +93,7 @@ Treat federation as HIGH RISK until compatibility is verified.
 
 ---
 
-# Upgrade Objective
+## Upgrade Objective
 
 Determine whether Istio can be safely upgraded from:
 
@@ -105,7 +111,7 @@ Determine:
 
 ---
 
-# Assessment Requirements
+## Assessment Requirements
 
 The assessment must combine:
 
@@ -127,7 +133,7 @@ Do not skip intermediate releases.
 
 ---
 
-# Step 1 — Gather Cluster Information
+## Step 1 — Gather Cluster Information
 
 Collect:
 
@@ -171,7 +177,7 @@ Determine:
 
 ---
 
-# Step 2 — Inventory Istio Installation
+## Step 2 — Inventory Istio Installation
 
 Collect:
 
@@ -204,7 +210,7 @@ Capture:
 
 ---
 
-# Step 3 — Multi Revision Analysis
+## Step 3 — Multi Revision Analysis
 
 Collect:
 
@@ -241,7 +247,7 @@ Reason:
 
 ---
 
-# Step 4 — Proxy Compatibility Analysis
+## Step 4 — Proxy Compatibility Analysis
 
 Collect:
 
@@ -277,7 +283,7 @@ Reason:
 
 ---
 
-# Step 5 — CRD Inventory and Compatibility
+## Step 5 — CRD Inventory and Compatibility
 
 Collect:
 
@@ -320,7 +326,7 @@ Reason:
 
 ---
 
-# Step 6 — EnvoyFilter Risk Analysis
+## Step 6 — EnvoyFilter Risk Analysis
 
 Collect:
 
@@ -374,7 +380,7 @@ Reason:
 
 ---
 
-# Step 7 — East-West Gateway Analysis
+## Step 7 — East-West Gateway Analysis
 
 Collect:
 
@@ -411,7 +417,7 @@ Reason:
 
 ---
 
-# Step 8 — Multi-Primary Multi-Network Analysis
+## Step 8 — Multi-Primary Multi-Network Analysis
 
 Collect:
 
@@ -453,7 +459,7 @@ Reason:
 
 ---
 
-# Step 9 — Federation Analysis
+## Step 9 — Federation Analysis
 
 Collect:
 
@@ -513,7 +519,7 @@ CRITICAL
 
 ---
 
-# Step 10 — Traffic Management Analysis
+## Step 10 — Traffic Management Analysis
 
 Collect:
 
@@ -543,7 +549,7 @@ Reason:
 
 ---
 
-# Step 11 — Security Analysis
+## Step 11 — Security Analysis
 
 Collect:
 
@@ -587,7 +593,7 @@ Reason:
 
 ---
 
-# Step 12 — Telemetry Analysis
+## Step 12 — Telemetry Analysis
 
 Review:
 
@@ -609,7 +615,7 @@ Reason:
 
 ---
 
-# Step 13 — Kubernetes Compatibility Analysis
+## Step 13 — Kubernetes Compatibility Analysis
 
 Review:
 
@@ -628,7 +634,7 @@ Reason:
 
 ---
 
-# Step 14 — Release Notes Analysis
+## Step 14 — Release Notes Analysis
 
 Review every release between source and target.
 
@@ -661,7 +667,7 @@ Produce:
 
 ---
 
-# Step 15 — Upgrade Simulation
+## Step 15 — Upgrade Simulation
 
 Simulate:
 
@@ -715,7 +721,7 @@ Reason:
 
 ---
 
-# Step 16 — Failure Scenario Analysis
+## Step 16 — Failure Scenario Analysis
 
 Explicitly answer:
 
@@ -793,7 +799,7 @@ Reason:
 
 ---
 
-# Step 17 — Upgrade Strategy Recommendation
+## Step 17 — Upgrade Strategy Recommendation
 
 Evaluate:
 
@@ -831,7 +837,7 @@ Recommend:
 
 ---
 
-# Risk Matrix
+## Risk Matrix
 
 | Area                     | Status | Severity | Explanation |
 | ------------------------ | ------ | -------- | ----------- |
@@ -850,7 +856,7 @@ Recommend:
 
 ---
 
-# Readiness Score
+## Readiness Score
 
 Calculate:
 
@@ -866,7 +872,7 @@ Readiness Score: XX/100
 
 ---
 
-# Confidence Score
+## Confidence Score
 
 Calculate:
 
@@ -886,7 +892,7 @@ Confidence must never exceed available evidence.
 
 ---
 
-# Executive Summary
+## Executive Summary
 
 UPGRADE DECISION:
 
@@ -956,7 +962,7 @@ Provide a detailed production-grade recommendation with rollback strategy and go
 
 ---
 
-# Mandatory Rule
+## Mandatory Rule
 
 For every discovered incompatibility report:
 

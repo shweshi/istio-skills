@@ -1,52 +1,68 @@
 # Istio Skills
 
-Welcome to **istio-skills**—a curated repository of expert-level system prompts, instructions, and runbooks designed for AI agents, platform engineers, and mesh administrators operating Istio service meshes in production.
+Welcome to **istio-skills**—a curated repository of expert-level, agent-ready skills and system prompts for Istio service mesh administration, upgrade assessment, and operations.
 
-This repository compiles formal assessment guidelines, operational scripts, and verification procedures to ensure stable, secure, and reliable service mesh management.
+This repository is structured as a collection of **Tessl plugins** containing specialized operational workflows, verification procedures, and diagnostic guidelines.
 
 ---
 
-## 🛠️ Available Skills
+## 📂 Repository Structure
 
-### 1. [istio-canary-upgrade](file:///Users/shashiprakashgautam/projects/istio-skills/istio-canary-upgrade/SKILL.md)
+The repository is organized around a plugin-based architecture under the `plugins/` directory:
 
-A comprehensive framework to guide a Principal Istio Service Mesh Architect, Kubernetes Platform Engineer, and Production Reliability Reviewer through a multi-revision canary upgrade process.
+```text
+istio-skills/
+├── plugins/
+│   └── istio-upgrade-skill/
+│       ├── .tessl-plugin/
+│       │   └── plugin.json             # Plugin metadata configuration
+│       └── skills/
+│           └── istio-upgrade-skill/
+│               └── SKILL.md            # Structured skill/runbook definition
+├── LICENSE
+└── README.md
+```
 
+---
+
+## 🛠️ Available Plugins & Skills
+
+### [istio-upgrade-skill](file:///Users/shashiprakashgautam/projects/istio-skills/plugins/istio-upgrade-skill/.tessl-plugin/plugin.json)
+*   **Version**: `0.1.0`
+*   **Skill Document**: [SKILL.md](file:///Users/shashiprakashgautam/projects/istio-skills/plugins/istio-upgrade-skill/skills/istio-upgrade-skill/SKILL.md)
 *   **Objective**: Perform compatibility, readiness, and risk assessments before upgrading Istio from a source version to a target version.
-*   **Mode**: Sidecar mode with Multi-Revision deployment, Multi-Primary Multi-Network topology, and Mesh Federation.
-*   **Key Steps Covered**:
-    1.  **Cluster Discovery**: Check Kubernetes versions, node wide output, api-resources.
-    2.  **Istio Inventory**: Control plane deployment, proxy-status check, and revision mapping.
-    3.  **Compatibility Checks**: Envoy proxy skew, CRD serve/storage versions, EnvoyFilter analysis.
-    4.  **Network & Security Review**: East-west gateway stability, cross-cluster endpoint discovery, federation compatibility, PeerAuthentication, and AuthorizationPolicies.
-    5.  **Simulated Execution**: Detailed step-by-step canary execution planning and rollback scenario modeling.
-    6.  **Risk Matrix & Scoring**: Standard templates for calculating a Readiness Score (0-100) and a Confidence Score.
-
-For detailed guidelines, view the [SKILL.md](file:///Users/shashiprakashgautam/projects/istio-skills/istio-canary-upgrade/SKILL.md) file.
+*   **Environment Assumptions**: Sidecar mode (Ambient disabled), Multi-Revision deployment, Multi-Primary Multi-Network cluster topology, and Mesh Federation.
+*   **Key Assessment Steps**:
+    1.  **Cluster & Istio Discovery**: Capture Kubernetes and control plane versions, node/network topologies, and version skews.
+    2.  **Inventory & Revision Analysis**: Map active control plane and proxy revisions, identify namespace webhooks, and assess migration feasibility.
+    3.  **Compatibility Analysis**: Check Envoy proxy skews, CRD versioning compatibility, and EnvoyFilter deprecations.
+    4.  **Network, Security, & Federation**: Verify east-west gateway paths, remote cluster endpoint secrets, and federation controllers/CRDs.
+    5.  **Simulation & Strategy**: Plan canary revision deployment, validation checkpoints, failure scenario responses, and rollbacks.
 
 ---
 
-## 🚀 How to Use These Skills
+## 🚀 How to Use These Plugins
 
-These templates are designed to be ingested by AI agents (like Antigravity or other LLMs) or followed manually by platform engineers.
+These skills are optimized for integration into agentic workflows or manual change-management checklists.
 
-### For AI Agents
-1.  Provide the contents of the [SKILL.md](file:///Users/shashiprakashgautam/projects/istio-skills/istio-canary-upgrade/SKILL.md) file as system instructions or few-shot context.
-2.  Provide your cluster information (output of the commands listed in Step 1 & 2 of the skill).
-3.  Ask the agent to generate a production-ready **Upgrade Readiness Assessment** following the mandatory rules.
+### For AI/Agent Integrations
+1.  Configure the agent workspace to load the plugin from [plugin.json](file:///istio-skills/plugins/istio-upgrade-skill/.tessl-plugin/plugin.json).
+2.  Provide the contents of the [SKILL.md](file:///istio-skills/plugins/istio-upgrade-skill/skills/istio-upgrade-skill/SKILL.md) file as system context.
+3.  Supply raw cluster dumps (e.g., `kubectl version`, `istioctl proxy-status`) and request a production-grade upgrade risk assessment report.
 
-### For Platform Engineers
-*   Use the checklists and CLI commands in [SKILL.md](file:///Users/shashiprakashgautam/projects/istio-skills/istio-canary-upgrade/SKILL.md) as a standardized checklist during change reviews or upgrade planning meetings.
+### For Manual Operations
+*   Follow the standardized step-by-step diagnostic workflows in the skill documents to review cluster readiness before applying mesh modifications.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions of new skills or improvements to existing ones are highly welcome!
+We welcome additions of new Tessl-compliant plugins or enhancements to existing ones:
 1.  Fork this repository.
-2.  Create a directory for your skill (e.g., `istio-ambient-migration`).
-3.  Add a `SKILL.md` file following the template structure.
-4.  Submit a Pull Request.
+2.  Create a sub-folder under `plugins/` (e.g., `plugins/istio-ambient-migration`).
+3.  Add `.tessl-plugin/plugin.json` describing your plugin.
+4.  Add your runbook inside `skills/<your-skill-name>/SKILL.md` using the standard frontmatter structure.
+5.  Submit a Pull Request.
 
 ---
 

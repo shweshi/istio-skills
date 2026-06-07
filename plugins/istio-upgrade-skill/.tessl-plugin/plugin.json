@@ -1,0 +1,6 @@
+{
+  "name": "local/istio-upgrade-skill",
+  "version": "0.1.0",
+  "description": "Isto skill to perform compatibility, readiness, and risk assessments before upgrading Istio from a source version to a target version.",
+  "private": true
+}
