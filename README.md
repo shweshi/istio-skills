@@ -11,6 +11,7 @@ commands, decision criteria, examples, and report templates.
 ## 🛠️ Available Plugins & Skills
 
 ### [istio-upgrade-skill](/istio-upgrade-skill/.tessl-plugin/plugin.json)
+[![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fshweshi%2Fistio-upgrade-skill)](https://tessl.io/registry/shweshi/istio-upgrade-skill)
 
 - **Version**: `0.1.4`
 - **Skill document**: [SKILL.md](/istio-upgrade-skill/SKILL.md)
@@ -40,6 +41,7 @@ commands, decision criteria, examples, and report templates.
 | - | Risk matrix and scoring | [SCORING_AND_RISK.md](/istio-upgrade-skill/references/SCORING_AND_RISK.md) |
 
 ### [istio-mesh-zero-trust-audit](/istio-mesh-zero-trust-audit/.tessl-plugin/plugin.json)
+[![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fshweshi%2Fistio-mesh-zero-trust-audit)](https://tessl.io/registry/shweshi/istio-mesh-zero-trust-audit)
 
 - **Version**: `0.1.0`
 - **Skill document**: [SKILL.md](/istio-mesh-zero-trust-audit/SKILL.md)
