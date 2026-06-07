@@ -25,27 +25,15 @@ Produce: risk matrix, readiness score, confidence score, and a go/no-go recommen
 
 ## Analysis Rules
 
-### Severity Classification
+### Severity & Incompatibility Format
 
-| Label | Meaning |
-|-------|---------|
-| PASS | No risk identified |
-| GOOD | Minor concern, no action required |
-| WARNING | Possible impact; verify before upgrade |
-| HIGH RISK | Likely impact; must mitigate before upgrade |
-| CRITICAL | Upgrade blocked until resolved |
+Classify issues by severity: **CRITICAL** (blocked), **HIGH RISK** (mitigate before upgrade), or **WARNING** (verify/remediate).
 
-### For Every Incompatibility, Report
+For each issue, report:
+- **Issue**: <what breaks> (Severity: CRITICAL/HIGH/WARN | Impact: <outage type> | Trigger: <upgrade phase>)
+- **Fix**: <remediation>
 
-```
-WHAT:      <what breaks>
-WHEN:      Control Plane Upgrade / Revision Cutover / Proxy Restart / First Deployment / Immediately
-IMPACT:    Outage / Partial Outage / Traffic Loss / Security Failure / Discovery Failure / Federation Failure / Telemetry Failure
-SEVERITY:  Critical / High / Medium / Low
-FIX:       <concrete remediation step>
-```
-
-Separate findings into: **Verified** | **Probable** | **Possible** | **Unknown**. Unknown findings reduce confidence score.
+Separate findings into: **Verified** | **Probable** | **Possible** | **Unknown** (unknowns reduce confidence score).
 
 ---
 
@@ -155,7 +143,6 @@ istioctl analyze -A
 ```
 
 - Run `istioctl analyze` against target CRD schema to surface invalid resources before upgrade.
-- Review release notes for every intermediate version (do not skip). Produce: Verified / Probable / Possible breaking changes.
 - Confirm Kubernetes version is in the [Istio support matrix](https://istio.io/latest/docs/releases/supported-releases/) for the target version.
 
 ---
@@ -201,35 +188,13 @@ Evaluate in this order:
 
 ## Risk Matrix
 
-| Area | Status | Severity | Explanation |
-|------|--------|----------|-------------|
-| Control Plane | | | |
-| Data Plane / Proxy Skew | | | |
-| Revisions & Webhooks | | | |
-| Sidecar Injection | | | |
-| CRDs | | | |
-| EnvoyFilters | | | |
-| East-West Gateways | | | |
-| Federation | | | |
-| Service Discovery | | | |
-| Security (mTLS / AuthzPolicy) | | | |
-| Telemetry | | | |
-| Kubernetes Compatibility | | | |
+See [`references/SCORING_AND_RISK.md`](references/SCORING_AND_RISK.md) for the evaluation template. Assess and complete the matrix for all 12 operational areas (Control Plane, Data Plane / Proxy Skew, Revisions/Webhooks, Sidecar Injection, CRDs, EnvoyFilters, East-West Gateways, Federation, Service Discovery, Security, Telemetry, and Kubernetes Compatibility).
 
 ---
 
 ## Scoring
 
-**Readiness Score** (0-100): Deduct per finding -- Critical: -20, High: -10, Warning: -3.
-
-| Score | Decision |
-|-------|----------|
-| 90-100 | [OK] Ready |
-| 75-89 | [WARN] Ready with remediation |
-| 50-74 | [RISK] Significant risk |
-| 0-49 | [NO] Not recommended |
-
-**Confidence Score** (0-100%): Start at 100%. Deduct 10% per unverified area, 5% per unknown component. Confidence must never exceed available evidence.
+See [`references/SCORING_AND_RISK.md`](references/SCORING_AND_RISK.md) for the scoring rubric and deduction values. Calculate the Readiness Score (0-100) and Confidence Score (0-100%) to determine the final upgrade decision.
 
 ---
 

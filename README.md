@@ -25,7 +25,8 @@ istio-skills/
 │                   ├── ENVOYFILTER_ANALYSIS.md  # xDS deprecation & Wasm ABI rules
 │                   ├── FEDERATION_ANALYSIS.md   # Federation controller compatibility
 │                   ├── SECURITY_ANALYSIS.md     # mTLS, AuthzPolicy, JWT rules
-│                   └── EAST_WEST_GATEWAY.md     # EW gateway upgrade ordering rules
+│                   ├── EAST_WEST_GATEWAY.md     # EW gateway upgrade ordering rules
+│                   └── SCORING_AND_RISK.md      # Risk matrix template & scoring rubric
 ├── LICENSE
 └── README.md
 ```
@@ -53,6 +54,7 @@ istio-skills/
 | 7 | Federation controller & trust bundle | [FEDERATION_ANALYSIS.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/references/FEDERATION_ANALYSIS.md) |
 | 8 | Security: mTLS, AuthzPolicy, JWT | [SECURITY_ANALYSIS.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/references/SECURITY_ANALYSIS.md) |
 | 9–10 | Traffic, telemetry, release notes | — |
+| — | Risk matrix & scoring | [SCORING_AND_RISK.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/references/SCORING_AND_RISK.md) |
 
 ---
 
