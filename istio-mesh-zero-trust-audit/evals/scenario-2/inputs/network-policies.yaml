@@ -1,0 +1,3 @@
+# No Kubernetes NetworkPolicy resources are defined in this cluster.
+# The following is a placeholder confirming their absence.
+# kubectl get networkpolicy -A returned: No resources found.

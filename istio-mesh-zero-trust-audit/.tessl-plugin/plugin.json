@@ -1,0 +1,17 @@
+{
+  "name": "shweshi/istio-mesh-zero-trust-audit",
+  "version": "0.1.1",
+  "description": "Audits Istio service meshes for evidence-backed Zero Trust maturity, attack paths, and remediation priorities.",
+  "skills": [
+    "."
+  ],
+  "authors": [
+    {
+      "name": "Shashi Prakash Gautam",
+      "email": "contactmespg@gmail.com"
+    }
+  ],
+  "repository": "https://github.com/shweshi/istio-skills",
+  "homepage": "https://github.com/shweshi/istio-skills/blob/main/README.md",
+  "license": "MIT"
+}

@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent correctly understands the limitations of REGISTRY_ONLY (proxy-controlled, bypassable), identifies gaps in egress coverage (wildcard ServiceEntry, no network-level controls, S3 not routed through egress gateway), and recommends layered controls rather than treating REGISTRY_ONLY as a firewall.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "REGISTRY_ONLY is not a firewall",
+      "description": "Assessment explicitly states that REGISTRY_ONLY is NOT an egress firewall — it only blocks unknown destinations handled by the proxy and can be bypassed by traffic that escapes mesh capture (e.g. host-network pods, non-sidecar workloads)",
+      "max_score": 14
+    },
+    {
+      "name": "Bypass paths identified",
+      "description": "Report identifies at least one category of traffic that can bypass REGISTRY_ONLY (e.g. pods on host network, unenrolled workloads, direct IP connections outside proxy capture)",
+      "max_score": 10
+    },
+    {
+      "name": "Wildcard ServiceEntry finding",
+      "description": "Flags that the *.amazonaws.com ServiceEntry is overly broad and allows any AWS endpoint, not just the intended S3 bucket(s)",
+      "max_score": 10
+    },
+    {
+      "name": "S3 not egress-gateway-routed",
+      "description": "Identifies that the *.amazonaws.com ServiceEntry has no corresponding VirtualService routing through the egress gateway — meaning S3 traffic is not actually inspected/routed through the gateway even though it is registered",
+      "max_score": 10
+    },
+    {
+      "name": "No network-level controls finding",
+      "description": "Flags the absence of Kubernetes NetworkPolicy or infrastructure-level network controls as a gap, since without them direct-IP traffic can escape mesh capture entirely",
+      "max_score": 10
+    },
+    {
+      "name": "Layered control recommendation",
+      "description": "Remediation recommends pairing REGISTRY_ONLY with network-level controls (e.g. Kubernetes NetworkPolicy or cloud firewall) that block direct outbound connections independently of the proxy",
+      "max_score": 10
+    },
+    {
+      "name": "Scoped ServiceEntry recommendation",
+      "description": "Recommends replacing wildcard ServiceEntry with scoped entries limited to specific hosts or CIDR ranges",
+      "max_score": 8
+    },
+    {
+      "name": "VERIFIED/INFERRED/UNKNOWN labels",
+      "description": "Each finding uses one of VERIFIED, INFERRED, or UNKNOWN to describe its evidence status",
+      "max_score": 8
+    },
+    {
+      "name": "Attack scenario present",
+      "description": "At least one finding includes a concrete attack scenario describing source, hops, and target (e.g. compromised workload with host-network access exfiltrating data bypassing proxy)",
+      "max_score": 8
+    },
+    {
+      "name": "Validation steps present",
+      "description": "At least one finding includes validation steps that specify both a positive test (allowed egress succeeds) and a negative test (blocked egress fails)",
+      "max_score": 8
+    },
+    {
+      "name": "Remediation time horizons",
+      "description": "Remediation plan contains at least Immediate and 30-day sections, not a flat undifferentiated list",
+      "max_score": 4
+    }
+  ]
+}

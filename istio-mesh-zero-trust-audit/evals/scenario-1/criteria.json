@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent correctly applies the Zero Trust scoring formula with correct weights and dimension ratings, caps the score appropriately, applies confidence deductions based on evidence gaps, assigns maturity levels in sequential order, and does not score unverified dimensions above 2.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Correct score formula",
+      "description": "Zero Trust score is calculated as sum((dimension_rating / 5) * dimension_weight) using the eight defined dimensions and their weights (Workload identity=15, mTLS=15, Request auth=10, Authorization=20, Segmentation=15, Ingress=10, Egress=10, Auditability=5)",
+      "max_score": 12
+    },
+    {
+      "name": "Unverified dimensions capped at 2",
+      "description": "Dimensions for which there is no verification evidence (e.g. Ingress, Egress, Request authentication — absent from supplied manifests) are rated no higher than 2",
+      "max_score": 10
+    },
+    {
+      "name": "Confidence deductions applied",
+      "description": "Confidence percentage is computed by starting at 100 and deducting points for specific evidence gaps present in the scenario (e.g. no live data-plane evidence, incomplete traffic tests, unknown ingress/egress path)",
+      "max_score": 10
+    },
+    {
+      "name": "Maturity level sequential",
+      "description": "Maturity level is the highest level for which all prior levels are verified — not skipped levels based on some but not all evidence",
+      "max_score": 10
+    },
+    {
+      "name": "No maturity credit without verification",
+      "description": "Report does not award maturity credit for controls that appear in configuration but have not been verified in the data plane (e.g. does not claim Level 2 mTLS maturity from STRICT config alone without traffic test evidence)",
+      "max_score": 10
+    },
+    {
+      "name": "ALLOW_ANY egress finding",
+      "description": "Report identifies that outboundTrafficPolicy is ALLOW_ANY (not REGISTRY_ONLY) as an egress governance gap",
+      "max_score": 8
+    },
+    {
+      "name": "Default SA shared identity finding",
+      "description": "Identifies that audit-logger and admin-portal use the default ServiceAccount, which creates shared identity — and correctly does NOT rate this CRITICAL by itself but raises severity based on the broad authorization grant",
+      "max_score": 8
+    },
+    {
+      "name": "VERIFIED/INFERRED/UNKNOWN labels",
+      "description": "Scorecard entries and findings use VERIFIED, INFERRED, or UNKNOWN to label their evidence status",
+      "max_score": 8
+    },
+    {
+      "name": "N/A score reported if appropriate",
+      "description": "If most dimensions cannot be scored from available evidence, report states N/A rather than manufacturing a score; OR if a score is given, all eight dimensions are addressed with evidence status",
+      "max_score": 8
+    },
+    {
+      "name": "Residual risk and retest section",
+      "description": "Report includes a section listing what evidence or tests are needed to close unknowns (e.g. live proxy-status, positive/negative traffic tests for critical paths)",
+      "max_score": 8
+    },
+    {
+      "name": "Verdict derived from score",
+      "description": "Overall verdict (STRONG/MODERATE/WEAK/HIGH RISK/INCONCLUSIVE) matches the ranges defined in scoring criteria and is consistent with the computed score and confidence",
+      "max_score": 8
+    }
+  ]
+}

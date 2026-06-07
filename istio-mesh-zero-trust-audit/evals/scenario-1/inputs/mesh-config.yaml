@@ -1,0 +1,16 @@
+# Simulated output of: kubectl get configmap -n istio-system istio -o yaml (relevant fields)
+# rootNamespace: istio-system
+# trustDomain: cluster.local
+# outboundTrafficPolicy: ALLOW_ANY
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: istio
+  namespace: istio-system
+data:
+  mesh: |
+    rootNamespace: istio-system
+    trustDomain: cluster.local
+    outboundTrafficPolicy:
+      mode: ALLOW_ANY

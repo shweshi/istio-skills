@@ -1,0 +1,30 @@
+# kubectl get namespaces --show-labels (relevant columns)
+# NAME        STATUS   LABELS
+# logistics   Active   istio.io/dataplane-mode=ambient
+# tracking    Active   istio.io/dataplane-mode=ambient
+# platform    Active   (no ambient label)
+# default     Active   (no ambient label)
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logistics
+  labels:
+    istio.io/dataplane-mode: ambient
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tracking
+  labels:
+    istio.io/dataplane-mode: ambient
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: default

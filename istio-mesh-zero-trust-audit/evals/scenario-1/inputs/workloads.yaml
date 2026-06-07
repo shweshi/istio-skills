@@ -1,0 +1,25 @@
+# Simulated output of: kubectl get pods -A (relevant columns)
+# NAMESPACE  NAME                        SERVICE_ACCOUNT  REVISION  SIDECAR
+# clinical   patient-api-7d9f-x4kp2      patient-api-sa   default   istio-proxy present
+# clinical   records-svc-6bc8-m2nq1      records-sa       default   istio-proxy present
+# clinical   audit-logger-5fc4-j9vr3     default          default   istio-proxy present
+# admin      admin-portal-9ab1-k3wz4     default          default   istio-proxy present
+# admin      report-gen-4de2-p7ys5       report-gen-sa    default   istio-proxy present
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: patient-api-sa
+  namespace: clinical
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: records-sa
+  namespace: clinical
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: report-gen-sa
+  namespace: admin

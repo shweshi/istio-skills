@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent correctly identifies that ambient enrollment does not imply L7 enforcement, that waypoint attachment is required for L7 policies, that DISABLE PeerAuthentication is not supported in ambient mode, and that policies on workloads without waypoints only receive L4 enforcement.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "No L7 from ambient alone",
+      "description": "Assessment explicitly states that ambient mesh enrollment does NOT automatically provide L7 enforcement — waypoint attachment is required for L7 policies to apply",
+      "max_score": 14
+    },
+    {
+      "name": "Tracking namespace gap",
+      "description": "Identifies that the tracking namespace has no waypoint gateway, so L7 AuthorizationPolicy rules (method-based, path-based) targeting tracking workloads are NOT enforced at L7",
+      "max_score": 12
+    },
+    {
+      "name": "deny-external-to-tracking ineffective at L7",
+      "description": "Flags that the deny-external-to-tracking policy uses HTTP method attribute (methods: POST) but tracking has no waypoint, meaning the method-based rule cannot be enforced at L7",
+      "max_score": 10
+    },
+    {
+      "name": "Logistics waypoint scope",
+      "description": "Correctly identifies that the logistics-waypoint is scoped to logistics-api-sa (via for-service-account annotation), meaning legacy-reporter workloads are NOT covered by the waypoint",
+      "max_score": 10
+    },
+    {
+      "name": "Platform namespace unenrolled",
+      "description": "Identifies that the platform namespace has no ambient label and monitoring-agent is unenrolled — its traffic does not receive mesh protection and should be marked as UNKNOWN coverage",
+      "max_score": 8
+    },
+    {
+      "name": "VERIFIED/INFERRED/UNKNOWN labels",
+      "description": "Each finding and conclusion about enforcement status uses VERIFIED, INFERRED, or UNKNOWN",
+      "max_score": 8
+    },
+    {
+      "name": "DISABLE PeerAuthentication note",
+      "description": "Assessment notes that DISABLE mode is not supported for ambient workloads (even if not present in these manifests, this limitation should be mentioned when recommending PeerAuthentication configurations)",
+      "max_score": 6
+    },
+    {
+      "name": "Attack scenario present",
+      "description": "At least one finding includes an attack scenario with source, hops, and target that exploits the L7 enforcement gap",
+      "max_score": 8
+    },
+    {
+      "name": "Waypoint deployment recommendation",
+      "description": "Remediation recommends deploying a waypoint for the tracking namespace to enable L7 policy enforcement",
+      "max_score": 8
+    },
+    {
+      "name": "Remediation validation steps",
+      "description": "At least one finding includes validation steps specifying both a positive test and a negative test to verify enforcement",
+      "max_score": 8
+    },
+    {
+      "name": "Control vs data-plane separation",
+      "description": "Report separates what is configured (PeerAuthentication STRICT, namespace ambient label) from what has been verified in the data plane",
+      "max_score": 8
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: istio
+  namespace: istio-system
+data:
+  mesh: |
+    outboundTrafficPolicy:
+      mode: REGISTRY_ONLY
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-payment-processor
+  namespace: payments
+spec:
+  hosts:
+  - api.payment-processor.example.com
+  ports:
+  - number: 443
+    name: https
+    protocol: HTTPS
+  location: MESH_EXTERNAL
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-s3
+  namespace: app
+spec:
+  hosts:
+  - "*.amazonaws.com"
+  ports:
+  - number: 443
+    name: https
+    protocol: HTTPS
+  location: MESH_EXTERNAL
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: egress-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: egressgateway
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - api.payment-processor.example.com
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: payment-processor-via-egress
+  namespace: payments
+spec:
+  hosts:
+  - api.payment-processor.example.com
+  gateways:
+  - mesh
+  - istio-system/egress-gateway
+  http:
+  - match:
+    - gateways:
+      - mesh
+    route:
+    - destination:
+        host: istio-egressgateway.istio-system.svc.cluster.local
+        port:
+          number: 443
+  - match:
+    - gateways:
+      - istio-system/egress-gateway
+    route:
+    - destination:
+        host: api.payment-processor.example.com
+        port:
+          number: 443

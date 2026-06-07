@@ -1,0 +1,42 @@
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: clinical
+spec:
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: admin
+spec:
+  mtls:
+    mode: PERMISSIVE
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-all-clinical
+  namespace: clinical
+spec:
+  rules:
+  - {}
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-patient-api
+  namespace: clinical
+spec:
+  selector:
+    matchLabels:
+      app: patient-api
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals:
+        - cluster.local/ns/admin/sa/default

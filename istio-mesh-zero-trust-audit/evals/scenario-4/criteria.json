@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent correctly prioritizes observed data-plane behavior over configuration intent when they conflict, identifies revision skew as a cause of the discrepancy, lowers confidence appropriately due to conflicting evidence, does not reduce impact due to missing evidence, and keeps findings open rather than resolving them based only on config.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Data-plane over config-plane",
+      "description": "Analysis explicitly states that observed proxy behavior (plaintext listeners, no mTLS context on data plane) takes precedence over the manifest-declared STRICT PeerAuthentication when they conflict",
+      "max_score": 14
+    },
+    {
+      "name": "Revision skew identified",
+      "description": "Identifies that the catalog pod has istio.io/rev=canary but no canary istiod or webhook exists, and attributes this as the likely cause of ineffective policy enforcement (stale or orphaned proxy)",
+      "max_score": 12
+    },
+    {
+      "name": "Finding kept open until reconciled",
+      "description": "The main mTLS/authorization finding is not marked VERIFIED as fixed or RESOLVED — it remains open with lower confidence until the revision skew is confirmed and corrected",
+      "max_score": 10
+    },
+    {
+      "name": "Missing evidence does not lower impact",
+      "description": "The severity or impact of the plaintext finding is NOT reduced due to uncertainty — uncertainty only reduces confidence, not impact (e.g. report does not say 'LOW severity because we can't be sure')",
+      "max_score": 10
+    },
+    {
+      "name": "Confidence reduced for conflicting evidence",
+      "description": "Confidence percentage explicitly deducts points for conflicting evidence (e.g. the 10-point deduction for conflicting evidence remaining unreconciled)",
+      "max_score": 10
+    },
+    {
+      "name": "VERIFIED/INFERRED/UNKNOWN labels",
+      "description": "Each conclusion uses VERIFIED, INFERRED, or UNKNOWN — the plaintext observation is labeled VERIFIED (observed), the policy config as INFERRED or UNKNOWN effective enforcement",
+      "max_score": 8
+    },
+    {
+      "name": "Causes of discrepancy enumerated",
+      "description": "Analysis lists possible causes for the contradiction: revision skew, stale proxy, selector/attachment mismatch — not just one guess",
+      "max_score": 8
+    },
+    {
+      "name": "Reconciliation evidence named",
+      "description": "Report specifies exactly what evidence would resolve the remaining unknowns (e.g. istioctl proxy-status to confirm sync, istioctl proxy-config with correct revision, positive/negative traffic test)",
+      "max_score": 8
+    },
+    {
+      "name": "Attack scenario present",
+      "description": "At least one finding includes an attack scenario showing the real-world impact of the plaintext path (e.g. intercepted cart-to-catalog traffic by another workload in the namespace)",
+      "max_score": 8
+    },
+    {
+      "name": "Remediation and validation steps",
+      "description": "Each finding includes a specific remediation (e.g. redeploy catalog pod under stable revision) and validation steps (positive and negative traffic tests after fix)",
+      "max_score": 8
+    },
+    {
+      "name": "Business impact addressed",
+      "description": "Each finding includes a business impact statement (confidentiality, integrity, availability, or compliance impact)",
+      "max_score": 4
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+# kubectl get pods -A (relevant columns showing sidecar/ambient status)
+# NAMESPACE   NAME                           SERVICE_ACCOUNT    AMBIENT_MODE
+# logistics   logistics-api-7f8d-x2kp1       logistics-api-sa   (ambient via namespace label)
+# logistics   legacy-reporter-3ab2-j4mn2     legacy-reporter-sa (ambient via namespace label)
+# tracking    tracking-svc-9cd4-p5qr3        tracking-svc-sa    (ambient via namespace label)
+# tracking    event-consumer-2ef1-m6st4      event-consumer-sa  (ambient via namespace label)
+# platform    monitoring-agent-1bc7-n8uv5    default            (no mesh enrollment)
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: logistics-api-sa
+  namespace: logistics
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: legacy-reporter-sa
+  namespace: logistics
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tracking-svc-sa
+  namespace: tracking
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: event-consumer-sa
+  namespace: tracking

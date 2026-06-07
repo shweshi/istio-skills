@@ -1,0 +1,1 @@
+{ "description": "Egress governance and REGISTRY_ONLY assessment", "include": ["./inputs"] }
