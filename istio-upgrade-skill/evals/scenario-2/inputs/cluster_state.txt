@@ -1,0 +1,69 @@
+## Cluster: us-east (PRIMARY)
+Kubernetes Version: 1.28.4
+Istio Control Plane: 1.21.2
+Istiod Revision: 1-21-2
+
+East-West Gateway:
+  Name: istio-eastwestgateway
+  Namespace: istio-system
+  Image: docker.io/istio/proxyv2:1.21.2
+  Replicas: 2/2
+
+Remote Secrets:
+  istio-remote-secret-us-west   -> us-west API: https://k8s-us-west.internal:6443  (age: 45d, status: valid)
+  istio-remote-secret-eu-central -> eu-central API: https://k8s-eu.internal:6443  (age: 45d, status: valid)
+
+Remote Clusters (istioctl remote-clusters):
+  NAME        SECRET                          STATUS    ISTIOD
+  us-west     istio-remote-secret-us-west     SYNCED    istiod-1-21-2
+  eu-central  istio-remote-secret-eu-central  SYNCED    istiod-1-21-2
+
+---
+
+## Cluster: us-west (PRIMARY)
+Kubernetes Version: 1.27.8
+Istio Control Plane: 1.21.2
+Istiod Revision: 1-21-2
+
+East-West Gateway:
+  Name: istio-eastwestgateway
+  Namespace: istio-system
+  Image: docker.io/istio/proxyv2:1.21.2
+  Replicas: 2/2
+
+Remote Secrets:
+  istio-remote-secret-us-east    -> us-east API: https://k8s-us-east.internal:6443  (age: 45d, status: valid)
+  istio-remote-secret-eu-central -> eu-central API: https://k8s-eu.internal:6443  (age: 45d, status: valid)
+
+Remote Clusters (istioctl remote-clusters):
+  NAME        SECRET                          STATUS    ISTIOD
+  us-east     istio-remote-secret-us-east     SYNCED    istiod-1-21-2
+  eu-central  istio-remote-secret-eu-central  SYNCED    istiod-1-21-2
+
+---
+
+## Cluster: eu-central (PRIMARY)
+Kubernetes Version: 1.27.6
+Istio Control Plane: 1.21.2
+Istiod Revision: 1-21-2
+
+East-West Gateway:
+  Name: istio-eastwestgateway
+  Namespace: istio-system
+  Image: docker.io/istio/proxyv2:1.19.5
+  Replicas: 2/2
+
+Remote Secrets:
+  istio-remote-secret-us-east -> us-east API: https://k8s-us-east.internal:6443  (age: 45d, status: valid)
+  istio-remote-secret-us-west -> us-west API: https://k8s-us-west.internal:6443  (age: 45d, status: valid)
+
+Remote Clusters (istioctl remote-clusters):
+  NAME      SECRET                        STATUS    ISTIOD
+  us-east   istio-remote-secret-us-east   SYNCED    istiod-1-21-2
+  us-west   istio-remote-secret-us-west   SYNCED    istiod-1-21-2
+
+---
+
+## Upgrade Target
+SOURCE_ISTIO_VERSION: 1.21.2
+TARGET_ISTIO_VERSION: 1.22.1

@@ -1,0 +1,66 @@
+{
+  "context": "Tests whether the agent correctly identifies that EW gateways must be upgraded before the control plane, flags the eu-central EW gateway's version skew as HIGH RISK, produces the correct 8-step canary upgrade ordering, and includes a proper rollback procedure with namespace relabeling.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "EW-before-control-plane rule",
+      "description": "Upgrade plan explicitly states East-West gateways must be upgraded before (or in sync with) the istiod control plane, not after",
+      "max_score": 12
+    },
+    {
+      "name": "EW on all clusters first",
+      "description": "Plan upgrades EW gateways on ALL three clusters before beginning namespace migration on any cluster",
+      "max_score": 10
+    },
+    {
+      "name": "eu-central EW skew = HIGH RISK",
+      "description": "Identifies that eu-central's EW gateway is on 1.19.5 (skew > N+1 from target 1.22.1) and classifies it as HIGH RISK",
+      "max_score": 12
+    },
+    {
+      "name": "Structured finding block",
+      "description": "The eu-central EW gateway skew finding includes WHAT, WHEN, IMPACT, SEVERITY, and FIX fields",
+      "max_score": 8
+    },
+    {
+      "name": "Non-critical namespaces first",
+      "description": "Upgrade plan migrates non-critical namespaces before critical namespaces within the canary phase",
+      "max_score": 8
+    },
+    {
+      "name": "Validation steps included",
+      "description": "Plan includes running 'istioctl proxy-status' (or istioctl remote-clusters) as a validation step after installing the new istiod revision",
+      "max_score": 8
+    },
+    {
+      "name": "Old revision removal last",
+      "description": "Plan removes the old istiod revision only after all namespaces have been migrated and traffic validated",
+      "max_score": 8
+    },
+    {
+      "name": "Rollback: namespace relabeling",
+      "description": "Rollback procedure includes relabeling namespaces back to the old revision label",
+      "max_score": 8
+    },
+    {
+      "name": "Rollback: restart workloads",
+      "description": "Rollback procedure includes restarting workloads to pull the old sidecar image",
+      "max_score": 8
+    },
+    {
+      "name": "Multi-cluster version divergence",
+      "description": "Plan explicitly addresses not letting clusters diverge by more than 1 minor version during the upgrade window",
+      "max_score": 8
+    },
+    {
+      "name": "Finding categorization",
+      "description": "Findings are categorized as Verified, Probable, Possible, or Unknown",
+      "max_score": 5
+    },
+    {
+      "name": "Severity labels used",
+      "description": "Report uses standard severity labels (CRITICAL, HIGH RISK, WARNING, GOOD, PASS) for all findings",
+      "max_score": 5
+    }
+  ]
+}
