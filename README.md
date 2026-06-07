@@ -15,10 +15,17 @@ istio-skills/
 ├── plugins/
 │   └── istio-upgrade-skill/
 │       ├── .tessl-plugin/
-│       │   └── plugin.json             # Plugin metadata configuration
+│       │   └── plugin.json                      # Plugin metadata & description
 │       └── skills/
 │           └── istio-upgrade-skill/
-│               └── SKILL.md            # Structured skill/runbook definition
+│               ├── SKILL.md                     # Concise upgrade workflow (~175 lines)
+│               └── references/
+│                   ├── PROXY_COMPATIBILITY.md   # Proxy skew classification & rules
+│                   ├── CRD_ANALYSIS.md          # CRD inventory & storage version rules
+│                   ├── ENVOYFILTER_ANALYSIS.md  # xDS deprecation & Wasm ABI rules
+│                   ├── FEDERATION_ANALYSIS.md   # Federation controller compatibility
+│                   ├── SECURITY_ANALYSIS.md     # mTLS, AuthzPolicy, JWT rules
+│                   └── EAST_WEST_GATEWAY.md     # EW gateway upgrade ordering rules
 ├── LICENSE
 └── README.md
 ```
@@ -27,17 +34,25 @@ istio-skills/
 
 ## 🛠️ Available Plugins & Skills
 
-### [istio-upgrade-skill](file:///Users/shashiprakashgautam/projects/istio-skills/plugins/istio-upgrade-skill/.tessl-plugin/plugin.json)
+### [istio-upgrade-skill](plugins/istio-upgrade-skill/.tessl-plugin/plugin.json)
 *   **Version**: `0.1.0`
-*   **Skill Document**: [SKILL.md](file:///Users/shashiprakashgautam/projects/istio-skills/plugins/istio-upgrade-skill/skills/istio-upgrade-skill/SKILL.md)
-*   **Objective**: Perform compatibility, readiness, and risk assessments before upgrading Istio from a source version to a target version.
-*   **Environment Assumptions**: Sidecar mode (Ambient disabled), Multi-Revision deployment, Multi-Primary Multi-Network cluster topology, and Mesh Federation.
-*   **Key Assessment Steps**:
-    1.  **Cluster & Istio Discovery**: Capture Kubernetes and control plane versions, node/network topologies, and version skews.
-    2.  **Inventory & Revision Analysis**: Map active control plane and proxy revisions, identify namespace webhooks, and assess migration feasibility.
-    3.  **Compatibility Analysis**: Check Envoy proxy skews, CRD versioning compatibility, and EnvoyFilter deprecations.
-    4.  **Network, Security, & Federation**: Verify east-west gateway paths, remote cluster endpoint secrets, and federation controllers/CRDs.
-    5.  **Simulation & Strategy**: Plan canary revision deployment, validation checkpoints, failure scenario responses, and rollbacks.
+*   **Skill Document**: [SKILL.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/SKILL.md)
+*   **Use when**: The user asks about upgrading Istio, checking version compatibility, planning an Istio migration, performing pre-upgrade validation, or preparing for a version bump.
+*   **What it does**: Checks CRD compatibility, validates sidecar proxy version skew, reviews EnvoyFilter deprecated API usage, analyzes east-west gateway and federation compatibility, identifies breaking changes across intermediate Istio releases, and produces a scored upgrade readiness assessment with a go/no-go recommendation.
+*   **Environment**: Sidecar mode, Multi-Revision deployment, Multi-Primary Multi-Network topology, Mesh Federation.
+
+#### Assessment Workflow
+| Step | Area | Reference |
+|------|------|-----------|
+| 1 | Cluster & Istio discovery | — |
+| 2 | Multi-revision & webhook audit | — |
+| 3 | Proxy version skew | [PROXY_COMPATIBILITY.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/references/PROXY_COMPATIBILITY.md) |
+| 4 | CRD storage version compatibility | [CRD_ANALYSIS.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/references/CRD_ANALYSIS.md) |
+| 5 | EnvoyFilter xDS & Wasm risk | [ENVOYFILTER_ANALYSIS.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/references/ENVOYFILTER_ANALYSIS.md) |
+| 6 | East-West gateways & multi-cluster | [EAST_WEST_GATEWAY.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/references/EAST_WEST_GATEWAY.md) |
+| 7 | Federation controller & trust bundle | [FEDERATION_ANALYSIS.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/references/FEDERATION_ANALYSIS.md) |
+| 8 | Security: mTLS, AuthzPolicy, JWT | [SECURITY_ANALYSIS.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/references/SECURITY_ANALYSIS.md) |
+| 9–10 | Traffic, telemetry, release notes | — |
 
 ---
 
@@ -46,12 +61,12 @@ istio-skills/
 These skills are optimized for integration into agentic workflows or manual change-management checklists.
 
 ### For AI/Agent Integrations
-1.  Configure the agent workspace to load the plugin from [plugin.json](file:///istio-skills/plugins/istio-upgrade-skill/.tessl-plugin/plugin.json).
-2.  Provide the contents of the [SKILL.md](file:///istio-skills/plugins/istio-upgrade-skill/skills/istio-upgrade-skill/SKILL.md) file as system context.
+1.  Configure the agent workspace to load the plugin from [plugin.json](plugins/istio-upgrade-skill/.tessl-plugin/plugin.json).
+2.  Provide the contents of the [SKILL.md](plugins/istio-upgrade-skill/skills/istio-upgrade-skill/SKILL.md) file as system context.
 3.  Supply raw cluster dumps (e.g., `kubectl version`, `istioctl proxy-status`) and request a production-grade upgrade risk assessment report.
 
 ### For Manual Operations
-*   Follow the standardized step-by-step diagnostic workflows in the skill documents to review cluster readiness before applying mesh modifications.
+*   Follow the standardized step-by-step diagnostic workflows in `SKILL.md` and dive into the relevant `references/` file for area-specific decision logic.
 
 ---
 
@@ -60,12 +75,13 @@ These skills are optimized for integration into agentic workflows or manual chan
 We welcome additions of new Tessl-compliant plugins or enhancements to existing ones:
 1.  Fork this repository.
 2.  Create a sub-folder under `plugins/` (e.g., `plugins/istio-ambient-migration`).
-3.  Add `.tessl-plugin/plugin.json` describing your plugin.
-4.  Add your runbook inside `skills/<your-skill-name>/SKILL.md` using the standard frontmatter structure.
-5.  Submit a Pull Request.
+3.  Add `.tessl-plugin/plugin.json` describing your plugin with a "Use when..." description.
+4.  Add your concise runbook in `skills/<your-skill-name>/SKILL.md` (aim for < 200 lines).
+5.  Add detailed decision logic in `skills/<your-skill-name>/references/` files.
+6.  Submit a Pull Request.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See [LICENSE](file:///Users/shashiprakashgautam/projects/istio-skills/LICENSE) for details.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

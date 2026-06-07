@@ -1,6 +1,6 @@
 {
   "name": "local/istio-upgrade-skill",
   "version": "0.1.0",
-  "description": "Isto skill to perform compatibility, readiness, and risk assessments before upgrading Istio from a source version to a target version.",
+  "description": "Use when the user asks about upgrading Istio, checking Istio version compatibility, planning an Istio migration, performing pre-upgrade validation, or preparing for an Istio version bump. Checks CRD compatibility, validates sidecar proxy version skew, reviews EnvoyFilter deprecated API usage, analyzes east-west gateway and federation compatibility, identifies breaking changes across intermediate Istio releases, and produces a scored upgrade readiness assessment with go/no-go recommendation.",
   "private": true
 }
