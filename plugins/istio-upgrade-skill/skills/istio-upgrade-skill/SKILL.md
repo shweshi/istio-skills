@@ -1,7 +1,7 @@
 ---
 name: istio-upgrade-skill
 description: |
-  Istio skill to perform compatibility, readiness, and risk assessments before upgrading Istio from a source version to a target version.
+  Use when the user asks about upgrading Istio, checking Istio version compatibility, planning an Istio migration, performing pre-upgrade checks, preparing for a version bump, or creating an Istio upgrade plan. Checks CRD compatibility and storage version changes, validates sidecar proxy version skew against control-plane skew limits, reviews EnvoyFilter deprecated xDS API usage and Wasm ABI compatibility, analyzes east-west gateway upgrade ordering in multi-cluster environments, assesses federation controller compatibility and trust bundle exchange, identifies breaking changes across all intermediate Istio releases, and produces a scored upgrade readiness assessment with a go/no-go recommendation and rollback strategy.
 ---
 
 # istio-upgrade-skill
