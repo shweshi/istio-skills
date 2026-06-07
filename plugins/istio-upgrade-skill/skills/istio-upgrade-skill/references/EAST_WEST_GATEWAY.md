@@ -29,9 +29,9 @@ istioctl proxy-config endpoints <east-west-gw-pod> | grep cross-cluster
 
 1. Identify EW gateway pods: match deployment names containing `east-west` or `eastwest`, or gateways with `topology.istio.io/network` label.
 2. Check gateway image version vs. target control plane version.
-3. If skew > 1 minor version between EW gateway and target istiod → **HIGH RISK**.
-4. Verify `istio-remote-secret` exists for every remote cluster and that the API server endpoint is reachable → missing secret = **CRITICAL** (cluster invisible to control plane).
-5. After control plane upgrade, run `istioctl remote-clusters` — all remote clusters must show `SYNCED`. If any shows `TIMEOUT` or `NOT READY` → rollback trigger.
+3. If skew > 1 minor version between EW gateway and target istiod -> **HIGH RISK**.
+4. Verify `istio-remote-secret` exists for every remote cluster and that the API server endpoint is reachable -> missing secret = **CRITICAL** (cluster invisible to control plane).
+5. After control plane upgrade, run `istioctl remote-clusters` -- all remote clusters must show `SYNCED`. If any shows `TIMEOUT` or `NOT READY` -> rollback trigger.
 
 ## Multi-Primary Specific Rules
 

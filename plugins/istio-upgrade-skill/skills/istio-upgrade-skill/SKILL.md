@@ -9,9 +9,9 @@ description: |
 ## Environment (Pre-verified)
 
 - **Mesh mode**: Sidecar (Ambient: disabled)
-- **Deployment model**: Multi-Revision — multiple istiod revisions coexist; namespaces pinned per revision
-- **Cluster topology**: Multi-Primary, Multi-Network — clusters communicate via East-West gateways
-- **Federation**: Enabled — treat as HIGH RISK until compatibility verified
+- **Deployment model**: Multi-Revision -- multiple istiod revisions coexist; namespaces pinned per revision
+- **Cluster topology**: Multi-Primary, Multi-Network -- clusters communicate via East-West gateways
+- **Federation**: Enabled -- treat as HIGH RISK until compatibility verified
 
 ---
 
@@ -49,7 +49,7 @@ Separate findings into: **Verified** | **Probable** | **Possible** | **Unknown**
 
 ---
 
-## Step 1 — Gather Cluster State
+## Step 1 -- Gather Cluster State
 
 ```bash
 kubectl version && kubectl get nodes -o wide
@@ -62,28 +62,28 @@ Capture: Kubernetes version, Istio control plane version, all installed revision
 
 ---
 
-## Step 2 — Multi-Revision & Webhook Audit
+## Step 2 -- Multi-Revision & Webhook Audit
 
 ```bash
 kubectl get ns --show-labels | grep 'istio.io/rev'
 kubectl get mutatingwebhookconfigurations | grep istio
 ```
 
-- Map namespaces → revision labels.
+- Map namespaces -> revision labels.
 - Flag orphaned revisions (revision label present, no live istiod for that revision).
-- Flag duplicate webhooks for the same namespace (webhook conflict → injection failure).
+- Flag duplicate webhooks for the same namespace (webhook conflict -> injection failure).
 
 ---
 
-## Step 3 — Proxy Skew
+## Step 3 -- Proxy Skew
 
 See [`references/PROXY_COMPATIBILITY.md`](references/PROXY_COMPATIBILITY.md) for classification thresholds and decision logic.
 
-Key rule: skew ≥ N+2 minor versions → **HIGH RISK**; skew > N+3 → **CRITICAL** (upgrade blocked).
+Key rule: skew >= N+2 minor versions -> **HIGH RISK**; skew > N+3 -> **CRITICAL** (upgrade blocked).
 
 ---
 
-## Step 4 — CRD Compatibility
+## Step 4 -- CRD Compatibility
 
 ```bash
 kubectl get crd | grep istio.io
@@ -92,11 +92,11 @@ kubectl get crd -o json | jq '.items[] | select(.metadata.name | contains("istio
 
 See [`references/CRD_ANALYSIS.md`](references/CRD_ANALYSIS.md) for inventory checklist and risk classification.
 
-Key rule: stored API version removed in target → **CRITICAL**; new validation rules breaking existing resources → **HIGH RISK**.
+Key rule: stored API version removed in target -> **CRITICAL**; new validation rules breaking existing resources -> **HIGH RISK**.
 
 ---
 
-## Step 5 — EnvoyFilter Analysis
+## Step 5 -- EnvoyFilter Analysis
 
 ```bash
 kubectl get envoyfilter -A -o yaml
@@ -104,11 +104,11 @@ kubectl get envoyfilter -A -o yaml
 
 See [`references/ENVOYFILTER_ANALYSIS.md`](references/ENVOYFILTER_ANALYSIS.md) for xDS pattern detection and Wasm ABI rules.
 
-Key rule: any `v2` proto reference → **CRITICAL**; Wasm ABI mismatch → **CRITICAL**; unverified filter → **HIGH RISK**.
+Key rule: any `v2` proto reference -> **CRITICAL**; Wasm ABI mismatch -> **CRITICAL**; unverified filter -> **HIGH RISK**.
 
 ---
 
-## Step 6 — East-West Gateways & Multi-Cluster
+## Step 6 -- East-West Gateways & Multi-Cluster
 
 ```bash
 kubectl get deploy -A | grep -E "east-west|eastwest"
@@ -118,11 +118,11 @@ istioctl remote-clusters
 
 See [`references/EAST_WEST_GATEWAY.md`](references/EAST_WEST_GATEWAY.md) for upgrade ordering rules and decision logic.
 
-Key rule: upgrade EW gateways **before** control plane; missing remote secret → **CRITICAL**.
+Key rule: upgrade EW gateways **before** control plane; missing remote secret -> **CRITICAL**.
 
 ---
 
-## Step 7 — Federation
+## Step 7 -- Federation
 
 ```bash
 kubectl get crd | grep -iE "federation|serviceexport|serviceimport"
@@ -131,11 +131,11 @@ kubectl get serviceexport,serviceimport -A
 
 See [`references/FEDERATION_ANALYSIS.md`](references/FEDERATION_ANALYSIS.md) for controller compatibility matrix and trust bundle rules.
 
-Key rule: no published federation controller compatibility with target Istio → **CRITICAL**; CA change → **CRITICAL**.
+Key rule: no published federation controller compatibility with target Istio -> **CRITICAL**; CA change -> **CRITICAL**.
 
 ---
 
-## Step 8 — Security
+## Step 8 -- Security
 
 ```bash
 kubectl get peerauthentication,authorizationpolicy,requestauthentication -A -o yaml
@@ -143,11 +143,11 @@ kubectl get peerauthentication,authorizationpolicy,requestauthentication -A -o y
 
 See [`references/SECURITY_ANALYSIS.md`](references/SECURITY_ANALYSIS.md) for mTLS, AuthorizationPolicy version-specific breaking changes, and JWT rules.
 
-Key rule: STRICT mTLS + proxy skew > N-1 → **HIGH RISK**; `CUSTOM` action policy with missing provider → **CRITICAL**.
+Key rule: STRICT mTLS + proxy skew > N-1 -> **HIGH RISK**; `CUSTOM` action policy with missing provider -> **CRITICAL**.
 
 ---
 
-## Step 9 — Traffic, Telemetry & Kubernetes Compatibility
+## Step 9 -- Traffic, Telemetry & Kubernetes Compatibility
 
 ```bash
 kubectl get virtualservice,destinationrule,serviceentry -A
@@ -160,7 +160,7 @@ istioctl analyze -A
 
 ---
 
-## Step 10 — Release Notes (All Intermediate Versions)
+## Step 10 -- Release Notes (All Intermediate Versions)
 
 For each release between source and target, review:
 - Breaking changes
@@ -176,8 +176,8 @@ For each release between source and target, review:
 
 Evaluate in this order:
 
-1. **In-Place Upgrade** — supported only for patch versions; not recommended for minor version jumps in multi-cluster environments.
-2. **Revision Upgrade (Canary)** — preferred strategy; installs new istiod revision alongside old, migrates namespaces incrementally.
+1. **In-Place Upgrade** -- supported only for patch versions; not recommended for minor version jumps in multi-cluster environments.
+2. **Revision Upgrade (Canary)** -- preferred strategy; installs new istiod revision alongside old, migrates namespaces incrementally.
 
 ### Recommended Upgrade Order (Canary)
 
@@ -220,16 +220,16 @@ Evaluate in this order:
 
 ## Scoring
 
-**Readiness Score** (0–100): Deduct per finding — Critical: −20, High: −10, Warning: −3.
+**Readiness Score** (0-100): Deduct per finding -- Critical: -20, High: -10, Warning: -3.
 
 | Score | Decision |
 |-------|----------|
-| 90–100 | ✅ Ready |
-| 75–89 | ⚠️ Ready with remediation |
-| 50–74 | 🔶 Significant risk |
-| 0–49 | 🚫 Not recommended |
+| 90-100 | [OK] Ready |
+| 75-89 | [WARN] Ready with remediation |
+| 50-74 | [RISK] Significant risk |
+| 0-49 | [NO] Not recommended |
 
-**Confidence Score** (0–100%): Start at 100%. Deduct 10% per unverified area, 5% per unknown component. Confidence must never exceed available evidence.
+**Confidence Score** (0-100%): Start at 100%. Deduct 10% per unverified area, 5% per unknown component. Confidence must never exceed available evidence.
 
 ---
 
